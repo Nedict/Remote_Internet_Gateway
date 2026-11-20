@@ -1,6 +1,12 @@
-# RIG — Remote Internet Gateway
+# RIG — Phase 1 foundation
 
-A mobile-first dashboard prototype for the future RIG home gateway app. It previews the customer experience for connection controls, gateway management, activity, and preferences.
+RIG is being developed in three phases: (1) mobile app and backend foundation, (2) backend integration and production services, and (3) the admin portal. This repository currently contains the mobile-first web-app preview and the initial backend contract/schema foundation.
+
+## Stack direction
+
+- Next.js App Router for the installable web app and versioned API routes
+- PostgreSQL for product data
+- Better Auth for account/session authentication (integration is not enabled yet)
 
 ## Run locally
 
@@ -11,19 +17,16 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Check the production build with:
+Open [http://localhost:3000](http://localhost:3000). `GET /api/v1/health` is a liveness endpoint and does not claim that the database or authentication provider is configured.
 
-```bash
-npm run build
-npm start
-```
+## Phase 1 foundation included
 
-## Preview behavior
+- PostgreSQL migration defining auth-compatible identity tables and RIG profile, gateway, membership/permission, device identity, connection session, notification, subscription, and audit-event data.
+- Versioned API liveness route at `/api/v1/health`.
+- `.env.example` documenting the planned server-only configuration.
 
-- Connect/disconnect state and session timer (simulated)
-- Select full-internet or home-devices-only mode
-- Gateway overview and pairing dialog
-- Activity and network-lock preference screens
-- Responsive mobile bottom navigation and desktop sidebar
+## Not production-ready yet
 
-This is a visual prototype only. It does not authenticate users, create a VPN tunnel, send pairing codes, or route traffic. Gateway and network readings shown are sample UI data, not live measurements.
+Authentication, authorization enforcement, database connectivity, gateway pairing, VPN connectivity, billing, and notification delivery are not wired up. Do not treat sample UI state as live data or expose this preview as a production service. Apply the migration only after selecting/configuring a migration runner and PostgreSQL instance; use a new migration for future schema changes. The device schema stores a credential hash and public key only—the private device key must remain on the device.
+
+See `docs/phase-1-architecture.md` for the staged implementation plan.
