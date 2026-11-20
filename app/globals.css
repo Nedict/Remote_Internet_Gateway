@@ -1,0 +1,71 @@
+* { box-sizing: border-box; }
+
+:root {
+  color-scheme: dark;
+  --ink: #f7f8fb;
+  --muted: #9da8bb;
+  --panel: rgba(20, 27, 43, 0.92);
+  --line: rgba(255, 255, 255, 0.08);
+  --accent: #7c83ff;
+}
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(102, 89, 255, 0.24), transparent 29rem),
+    radial-gradient(circle at 88% 78%, rgba(30, 170, 184, 0.12), transparent 24rem),
+    #090c13;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.gateway-card {
+  width: min(100%, 420px);
+  min-height: 620px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 28px;
+  background: var(--panel);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(18px);
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: linear-gradient(145deg, #767eff, #5058d9);
+  font-weight: 800;
+}
+.eyebrow { margin: 0 0 3px; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; }
+h1 { margin: 0; font-size: 22px; }
+.status-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 38px; color: #b8c1d1; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #54d5a2; box-shadow: 0 0 18px #54d5a2; }
+
+.connect-button {
+  width: 208px; height: 208px; margin: 36px auto 42px; display: grid; place-content: center; gap: 12px;
+  color: white; border: 1px solid rgba(145, 151, 255, 0.38); border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #6e74ec, #4348a5 65%, #30366f);
+  box-shadow: 0 0 0 14px rgba(124, 131, 255, 0.04), 0 18px 50px rgba(64, 69, 180, 0.38);
+  font-size: 18px; font-weight: 700; cursor: pointer;
+}
+.connect-button:active { transform: scale(0.98); }
+.power-icon { font-size: 52px; line-height: 1; }
+
+.details { margin: 0; border-top: 1px solid var(--line); }
+.details div { display: flex; justify-content: space-between; padding: 15px 2px; border-bottom: 1px solid var(--line); }
+.details dt { color: var(--muted); }
+.details dd { margin: 0; font-weight: 600; }
+
+@media (max-width: 480px) {
+  .app-shell { align-items: start; padding: 10px; }
+  .gateway-card { min-height: calc(100vh - 20px); border-radius: 22px; }
+}
