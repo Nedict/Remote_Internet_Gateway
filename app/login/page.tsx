@@ -28,7 +28,8 @@ export default function LoginPage() {
         setMessage(result.error.message || "We couldn’t complete that request. Check your details and try again.");
         return;
       }
-      window.location.assign("/");
+      const next = new URLSearchParams(window.location.search).get("next");
+      window.location.assign(next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard");
     } catch {
       setMessage("RIG authentication is unavailable. Check the server and database configuration.");
     } finally {
