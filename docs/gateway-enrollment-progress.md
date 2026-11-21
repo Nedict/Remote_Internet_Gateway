@@ -1,0 +1,5 @@
+- `POST /api/v1/gateways/enroll` creates pending gateway ownership and a 15-minute setup code.
+- `POST /api/v1/gateways/claim` matches the supplied code only against currently pending, unexpired codes and consumes it atomically.
+- `DELETE /api/v1/gateways/[gatewayId]` verifies membership before gateway removal; only UI owners see the remove action.
+- The dashboard now supports create, claim, refresh, and remove operations.
+- Codes remain hashed at rest; plaintext is shown only once in the create response and dashboard.
