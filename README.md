@@ -1,32 +1,33 @@
-# RIG — Phase 1 foundation
+# RIG — Phase 2 foundation
 
-RIG is being developed in three phases: (1) mobile app and backend foundation, (2) backend integration and production services, and (3) the admin portal. This repository currently contains the mobile-first web-app preview and the initial backend contract/schema foundation.
-
-## Stack direction
-
-- Next.js App Router for the installable web app and versioned API routes
-- PostgreSQL for product data
-- Better Auth for account/session authentication (integration is not enabled yet)
+RIG is an installable, mobile-first web app with a staged backend foundation. The current Phase 2 work adds the PostgreSQL/Drizzle access layer, Better Auth email/password endpoints, scoped profile and gateway reads, a readiness probe, and a transactional SQL migration runner.
 
 ## Run locally
 
-Requires Node.js 20.9 or newer.
+Requires Node.js 20.9 or newer and PostgreSQL.
 
 ```bash
 npm install
+cp .env.example .env.local
+# Set DATABASE_URL to a database you control and generate a unique BETTER_AUTH_SECRET.
+npm run db:migrate
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). `GET /api/v1/health` is a liveness endpoint and does not claim that the database or authentication provider is configured.
+Generate a secret with `openssl rand -base64 32`. Visit `/login` to create an account or sign in. The dashboard still contains clearly marked demo gateway and connection state; it does not create a VPN tunnel.
 
-## Phase 1 foundation included
+## API
 
-- PostgreSQL migration defining auth-compatible identity tables and RIG profile, gateway, membership/permission, device identity, connection session, notification, subscription, and audit-event data.
-- Versioned API liveness route at `/api/v1/health`.
-- `.env.example` documenting the planned server-only configuration.
+- `GET /api/v1/health` — process liveness only.
+- `GET /api/v1/ready` — checks PostgreSQL connectivity and returns 503 when unavailable.
+- Better Auth handler: `/api/auth/*` (email/password; configured via `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, and `DATABASE_URL`).
+- `GET /api/v1/profile` — authenticated user and lazily initialized profile.
+- `GET /api/v1/gateways` — authenticated gateways where the user has membership; never accepts a user ID from the caller.
 
-## Not production-ready yet
+## Database
 
-Authentication, authorization enforcement, database connectivity, gateway pairing, VPN connectivity, billing, and notification delivery are not wired up. Do not treat sample UI state as live data or expose this preview as a production service. Apply the migration only after selecting/configuring a migration runner and PostgreSQL instance; use a new migration for future schema changes. The device schema stores a credential hash and public key only—the private device key must remain on the device.
+SQL migrations in `db/migrations` are applied in filename order by `npm run db:migrate`. Applied migration names are stored in `rig_schema_migrations`; migrations run transactionally and should be immutable once applied. Back up the database before applying schema changes.
 
-See `docs/phase-1-architecture.md` for the staged implementation plan.
+## Important limitations
+
+This is an early development integration, not a production-ready public auth service. Before launch, configure HTTPS and a real trusted origin, email verification and password-reset delivery, rate limiting, CSRF/origin policy, monitoring, backups, and security tests. Do not deploy with example credentials. Gateway pairing, device credential enrollment, connection control, billing, and notifications are not yet active. UI sample data is not live telemetry.
